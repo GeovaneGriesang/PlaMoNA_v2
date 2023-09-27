@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: true
+  origin: '*'
 }));
 
 //Rota das medicoes atuais
@@ -31,11 +31,11 @@ app.post('/medicoes', (req, res) => {
           return { "x": formattedDate, "y": nivel };
         });
   
-        const chartData = {
+        const chartData = [{
           "id": id,
-          "color": "hsl(500, 50%, 50%)",
+          "color": "#3633f9",
           "data": dado
-        };
+        }];
   
         console.log(chartData); // Exibir o objeto do gráfico no console
         res.status(200).json(chartData);
@@ -55,39 +55,16 @@ app.post('/medicoes', (req, res) => {
           return { "x": formattedDate, "y": nivel };
         });
   
-        const chartData = {
+        const chartData = [{
           "id": id,
           "color": "hsl(500, 50%, 50%)",
           "data": dado
-        };
+        }];
   
         console.log(chartData); // Exibir o objeto do gráfico no console
         res.status(200).json(chartData);
       }
     });  
-  } else if (periodo === 'mes') {
-    query = 'SELECT AVG(nivel), data FROM medicoes WHERE MONTH(data) = MONTH(CURDATE()) GROUP BY data';
-    connection.query(query, (error, results) => {
-      if (error) {
-        console.error('Erro ao obter dados do banco de dados:', error);
-        res.status(500).json({ error: 'Erro ao obter dados do banco de dados.' });
-      } else {
-        const data = results.map(result => {
-          const { nivel, data } = result;
-          const formattedDate = new Date(data).toLocaleDateString('pt-BR',{ day: '2-digit', month: '2-digit' });
-          return { "x": formattedDate, "y": nivel };
-        });
-  
-        const chartData = {
-          "id": "Mês",
-          "color": "hsl(236, 95%, 69%)",
-          "data": data
-        };
-  
-        console.log(chartData); // Exibir o objeto do gráfico no console
-        res.status(200).json(chartData);
-      }
-    });
   } else if (periodo==='dia') {
     query = 'SELECT nivel, DATE_FORMAT(hora, "%H:%i") as hora FROM medicoes WHERE data = CURDATE()';
   //const query = 'SELECT * FROM medicoes';
@@ -102,11 +79,11 @@ app.post('/medicoes', (req, res) => {
           return { x: hora, y: nivel };
         });
 
-        const chartData = {
+        const chartData = [{
           id: "Dia",
           color: "hsl(200, 50%, 50%)",
           data: data
-        };
+        }];
 
         console.log(chartData); // Exibir o objeto do gráfico no console
         res.status(200).json(chartData);
@@ -435,6 +412,6 @@ app.post('/api/login', (req, res) => {
   });
 });
 
- app.listen(3000, () => {
-   console.log('Servidor iniciado na porta 3000.');
+ app.listen(4000, () => {
+   console.log('Servidor iniciado na porta 4000.');
  });
