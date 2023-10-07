@@ -24,7 +24,6 @@ app.get('/', (req, res) => {
   const filePath = path.join(__dirname, 'documentation.html');
   
   // Envie o arquivo HTML como resposta
-  res.status(200).json({data: 'Conexão com a API está ativa!!'})
   res.sendFile(filePath);
 });
 
