@@ -1,8 +1,16 @@
+/* 
+*  API PlaMoNA V2.0
+*  Acesse https://plamona.onrender.com/ para ter acesso a documentação da API
+*  @jgdalmeida
+*/
+
+
 const express = require('express');
 const app = express();
 const connection = require('./database');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -11,44 +19,83 @@ app.use(cors({
   origin: '*'
 }));
 
+//Rota da documentação
+app.get('/', (req, res) => {
+  const filePath = path.join(__dirname, 'documentation.html');
+  
+  // Envie o arquivo HTML como resposta
+  res.status(200).json({data: 'Conexão com a API está ativa!!'})
+  res.sendFile(filePath);
+});
+
 //Rota das medicoes atuais
 app.post('/medicoes', (req, res) => {
+
+  // fazendo a requisição do período
   const periodo = req.body.periodo;
   let query = '';
   let id = '';
 
+  // Testando os períodos
+
+  // Período semana
   if (periodo === 'semana') {
+
+    // query pro banco de dados
     query = 'SELECT AVG(nivel) as nivel, data FROM medicoes WHERE YEARWEEK(data) = YEARWEEK(NOW()) GROUP BY data';
+    // id que será enviado no json
     id ='Semana Atual';
+
+    //fazendo consulta no banco
     connection.query(query, (error, results) => {
+      // Testando erros
       if (error) {
         console.error('Erro ao obter dados do banco de dados:', error);
+        // retornando erro
         res.status(500).json({ error: 'Erro ao obter dados do banco de dados.' });
       } else {
+        // formatando dados para o gráfico
         const dado = results.map(result => {
           const { nivel, data } = result;
+          // formatando data para deixar legível
           const formattedDate = new Date(data).toLocaleString('pt-BR', { weekday: 'short' });
+
+          // retornando dados para o gráfico
           return { "x": formattedDate, "y": nivel };
         });
   
+        // json pronto para mandar para o gráfico
         const chartData = [{
           "id": id,
           "color": "#3633f9",
           "data": dado
         }];
   
-        console.log(chartData); // Exibir o objeto do gráfico no console
+        
+        // console.log(chartData); // Exibir o objeto do gráfico no console
+        // enviando resposta
         res.status(200).json(chartData);
       }
-    });  
-  } else if (periodo === 'semanaAnterior') {
+    });
+  } 
+  
+  // Período da semana anterior
+  else if (periodo === 'semanaAnterior') {
+
+    // query do banco de dados
     query = 'SELECT AVG(nivel) as nivel, data FROM medicoes WHERE YEARWEEK(data) = YEARWEEK(DATE_SUB(NOW(), INTERVAL 1 WEEK)) GROUP BY data';
+    // Id para ser mostrado no gráfico
     id ='Semana Anterior';
+
+    // fazendo consulta no banco 
     connection.query(query, (error, results) => {
+      //testando erro
       if (error) {
         console.error('Erro ao obter dados do banco de dados:', error);
         res.status(500).json({ error: 'Erro ao obter dados do banco de dados.' });
-      } else {
+      } 
+      // formatando dados para o gráfico
+      else {
         const dado = results.map(result => {
           const { nivel, data } = result;
           const formattedDate = new Date(data).toLocaleString('pt-BR', { weekday: 'short' });
@@ -61,19 +108,28 @@ app.post('/medicoes', (req, res) => {
           "data": dado
         }];
   
-        console.log(chartData); // Exibir o objeto do gráfico no console
+        // console.log(chartData); // Exibir o objeto do gráfico no console
+
+        // retornando resultados
         res.status(200).json(chartData);
       }
     });  
-  } else if (periodo==='dia') {
-    query = 'SELECT nivel, DATE_FORMAT(hora, "%H:%i") as hora FROM medicoes WHERE data = CURDATE()';
-  //const query = 'SELECT * FROM medicoes';
+  } 
 
+  // período dia
+  else if (periodo==='dia') {
+    // query para o banco de dados
+    query = 'SELECT nivel, DATE_FORMAT(hora, "%H:%i") as hora FROM medicoes WHERE data = CURDATE()';
+
+    // fazendo requisição ao banco
     connection.query(query, (error, results) => {
+      //testando erro
       if (error) {
         console.error('Erro ao obter dados do banco de dados:', error);
         res.status(500).json({ error: 'Erro ao obter dados do banco de dados.' });
-      } else {
+      }
+      // formatando dados e mandando para os gráficos
+      else {
         const data = results.map(result => {
           const { nivel, hora } = result;
           return { x: hora, y: nivel };
@@ -85,11 +141,16 @@ app.post('/medicoes', (req, res) => {
           data: data
         }];
 
-        console.log(chartData); // Exibir o objeto do gráfico no console
+        // console.log(chartData); // Exibir o objeto do gráfico no console
+        
+        // enviando resposta da api
         res.status(200).json(chartData);
       }
     });
-  } else {
+  } 
+
+  // enviando erro de período inválido
+  else {
     res.status(400).json({ error: 'Período inválido.' });
     return;
   }  
@@ -106,7 +167,7 @@ app.post('/comparacao', (req, res) => {
   let dado2 = '';
   let query1 = '';
   let query2 = '';
-
+console.log(comp_1)
   if (periodo === 'semana') {
     query1 = `SELECT AVG(nivel) as nivel, data FROM medicoes WHERE YEARWEEK(data) = YEARWEEK('${comp1}') GROUP BY data`;
     query2 = `SELECT AVG(nivel) as nivel, data FROM medicoes WHERE YEARWEEK(data) = YEARWEEK('${comp2}') GROUP BY data`;
