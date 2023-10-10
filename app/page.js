@@ -43,9 +43,7 @@ export default function Page() {
         <>
         <ThemeProvider theme={theme}>
             <Box sx={{
-                    background: 'linear-gradient(180deg, #b7B7ff 0%, #727272 100%), radial-gradient(60.91% 100% at 50% 0%, #D1D1FF 0%, #260000 100%), linear-gradient(127.43deg, #00ddFF 0%, #FFFFFF 100%), radial-gradient(100.22% 100% at 70.57% 0%, #2b2dff 0%, #00ddE0 100%), linear-gradient(64.82deg, #DB22FF 0%, #3300FF 100%)',
-                    backgroundBlendMode: 'screen, overlay, color-burn, color-dodge, normal',
-                    backdropFilter: 'blur(2px)',
+                    backgroundColor: tokens.grey[100],
                 }}>
                 <Navbar logo={
                     <Box sx={{
@@ -67,14 +65,17 @@ export default function Page() {
                             height: '26em',
                             padding: '.5em',
                             margin: '1em',
-                            backgroundColor: tokens.primary[600]+"88",
+                            backgroundColor: tokens.primary[200],
                             borderRadius: '2em',
+                            borderColor: tokens.primary[200]+"77",
+                            border: "0.5em"
                         }}>
                             <Box sx={{
                                 borderRadius: '1.5em',
-                                backgroundColor: tokens.blueAccent[600]+"0f",
+                                backgroundColor: tokens.primary[500],
                                 height: '25em',
                                 padding: '1em',
+                                boxShadow: '2em 0 3em #00000077',
                             }}>
                                 <Grafico data={data} />
                             </Box>

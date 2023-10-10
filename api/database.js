@@ -4,7 +4,7 @@ import axios from 'axios';
 // Função para receber dados por período
 export const obterMedicao = async (periodo) => {
     try {
-        const response = await axios.post('https://plamona.onrender.com/medicoes', { periodo }); // Corrigi o endereço IP para 127.0.0.1
+        const response = await axios.post('http://127.0.0.1:4000/medicoes', { periodo }); // Corrigi o endereço IP para 127.0.0.1
         return response.data;
     } catch (error) {
         console.error('Erro ao obter dados:', error);

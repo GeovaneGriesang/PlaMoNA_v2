@@ -24,7 +24,7 @@ export default function Navbar({buttons, logo}) {
     <>
     <ThemeProvider theme={theme}>
       <Box className="flex py-3 shadow-lg lg:px-40 md:px-10" sx={{
-        backgroundColor: tokens.blueAccent[300]+"77", 
+        backgroundColor: tokens.grey[100], 
         flexDirection: {sm: 'row', xs: 'column'},
         justifyContent: 'space-between',
         alignItems: 'center'

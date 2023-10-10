@@ -6,10 +6,11 @@ import Image from "next/image";
 export default function Footer() {
     return(
         <>
-            <Box py='2em' px={{sm: '5em', xs: '2em'}} width='100vw' mt='5em' classname='shadow-lg' sx={{
-                    background: tokens.blueAccent[300]+"77",
+            <Box py='2em' px={{sm: '5em', xs: '2em'}} width='100vw' mt='5em' classname='drop-shadow-lg' sx={{
+                    background: tokens.grey[100],
                     color: "#000000",
                     backdropFilter: 'blur(2px)',
+                    boxShadow: '0em -0.5em 1em #a0a0a077'
                 }}>
                 <Box display='flex' justifyContent='space-between' flexDirection='row'>
                     <Box sx={{

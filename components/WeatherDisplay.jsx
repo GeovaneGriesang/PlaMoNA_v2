@@ -35,19 +35,22 @@ export default function WeatherDisplay() {
         <ThemeProvider theme={theme}>
             <Box sx={{
                         width: {sm: '30em', xs: '20em'},
-                        height: {sm: '26em', xs: '31em'},
+                        height: '26em',
                         padding: '.5em',
                         margin: '1em',
-                        backgroundColor: tokens.primary[600]+"88",
+                        backgroundColor: tokens.primary[200],
                         borderRadius: '2em',
+                        borderColor: tokens.primary[200]+"77",
+                        border: "0.5em"
                         }}>
                 {data && data.condition && (
                     <Box>
                         <Box sx={{
                             borderRadius: '1.5em',
-                            backgroundColor: tokens.blueAccent[600]+"0f",
-                            height: {sm: '25em', xs: '30em'},
+                            backgroundColor: tokens.primary[500],
+                            height: '25em',
                             padding: '1em',
+                            boxShadow: '2em 0 3em #00000077',
                         }}>
                             <Box sx={{
                                 display: 'flex',

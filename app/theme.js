@@ -7,7 +7,7 @@ import { createTheme } from "@mui/material/styles";
 // color export
 export const tokens = {
         grey: {
-          100: "#e0e0e0",
+          100: "#d0d0d0",
           200: "#c2c2c2",
           300: "#a3a3a3",
           400: "#858585",
